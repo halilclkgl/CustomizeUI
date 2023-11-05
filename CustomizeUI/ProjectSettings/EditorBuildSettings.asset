@@ -4,5 +4,14 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/PolygonFantasyHeroCharacters/Scenes/First.unity
+    guid: 3572c54ce21bbd749adde34a9c075a64
+  - enabled: 1
+    path: Assets/Scenes/SampleScene.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/Next.unity
+    guid: 1f690775b2f9bee4d8c4a8d8091e42d9
   m_configObjects: {}

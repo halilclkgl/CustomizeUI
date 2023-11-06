@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UICustomize : MonoBehaviour
 {
@@ -8,18 +9,41 @@ public class UICustomize : MonoBehaviour
     [SerializeField] private PlayerSO _PlayerSO;
     [SerializeField] private Shop _shop;
     [SerializeField] private ObjectType _type;
+    private bool isButtonLocked = false;
+    [SerializeField] Button btnNext;
+    [SerializeField] Button btnBack;
+    [SerializeField] Button btnBuy;
 
     private int current = 0;
     private int gold = 999999;
 
+    private void OnEnable()
+    {
+
+        if (_shop == null)
+            return;
+
+        _shop.ResetCurrentGold();
+        print("OnEnable");
+    }
     private void Awake()
     {
+
         current = _PlayerSO.DenemeGet(_type);
         SetActiveCharacter(current);
     }
+    private void Start()
+    {
+        if (btnNext == null)
+            return;
 
+        btnNext.onClick.AddListener(NextUI);
+        btnBack.onClick.AddListener(BackUI);
+        btnBuy.onClick.AddListener(BtnBuy);
+    }
     public void NextUI()
     {
+        if (isButtonLocked) return;
         int nextCharacterIndex = current + 1;
         if (nextCharacterIndex < GameObjects.Length)
         {
@@ -32,11 +56,11 @@ public class UICustomize : MonoBehaviour
             int nextCharacterPrice = GameObjects[nextCharacterIndex].GetComponent<FeaturesGameObject>().GameObjectSO()._price;
             if (!GameObjects[current].GetComponent<FeaturesGameObject>().GameObjectSO()._available)
             {
-                _shop.BuyItem(false, currentCharacterPrice);
+                _shop.UpdateGold(false, currentCharacterPrice, name);
             }
             if (!GameObjects[nextCharacterIndex].GetComponent<FeaturesGameObject>().GameObjectSO()._available)
             {
-                _shop.BuyItem(true, nextCharacterPrice);
+                _shop.UpdateGold(true, nextCharacterPrice, name);
             }
 
             SetActiveCharacter(nextCharacterIndex);
@@ -46,6 +70,8 @@ public class UICustomize : MonoBehaviour
 
     public void BackUI()
     {
+        if (isButtonLocked) return;
+        StartCoroutine(UnlockButtonAfterDelay());
         int previousCharacterIndex = current - 1;
         if (previousCharacterIndex >= 0)
         {
@@ -59,11 +85,11 @@ public class UICustomize : MonoBehaviour
 
             if (!GameObjects[current].GetComponent<FeaturesGameObject>().GameObjectSO()._available)
             {
-                _shop.BuyItem(false, currentCharacterPrice);
+                _shop.UpdateGold(false, currentCharacterPrice, gameObject.name);
             }
             if (!GameObjects[previousCharacterIndex].GetComponent<FeaturesGameObject>().GameObjectSO()._available)
             {
-                _shop.BuyItem(true, previousCharacterPrice);
+                _shop.UpdateGold(true, previousCharacterPrice, gameObject.name);
             }
             // _shop.BuyItem(false, currentCharacterPrice);
             SetActiveCharacter(previousCharacterIndex);
@@ -82,16 +108,17 @@ public class UICustomize : MonoBehaviour
     }
     public void BtnBuy()
     {
-        if ((_PlayerSO.Gold > GetCharacterPrice(current)) && IsCharacterAvailable(current) && !IsCharacterAvailable2(current))
+        if (isButtonLocked) return;
+        StartCoroutine(UnlockButtonAfterDelay());
+        StartCoroutine(UnlockButtonAfterDelay());
+        if ((_PlayerSO.Gold < GetCharacterPrice(current)) || !IsCharacterAvailable(current) || IsCharacterAvailable2(current))
         {
             return;
         }
 
         int characterPrice = GetCharacterPrice(current);
-        _shop.BuyItemC(characterPrice);
-        print("asdasdas");
+        _shop.ConfirmPurchase();
         SetCharacterAvailable(current, true);
-        Debug.Log(gold);
         PlayerSave();
     }
 
@@ -127,6 +154,14 @@ public class UICustomize : MonoBehaviour
 
     private void PlayerSave()
     {
+        if (!IsCharacterAvailable2(current))
+            return;
+
         _PlayerSO.DenemeSet(_type, current);
+    }
+    private IEnumerator UnlockButtonAfterDelay()
+    {
+        yield return new WaitForSeconds(0.3f); // Ýþlemden sonra belirli bir süre sonra butonu etkinleþtir
+        isButtonLocked = false;
     }
 }

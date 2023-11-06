@@ -9,13 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4cd23a5b29f2b5047a36ca2e70cf44eb, type: 3}
-  m_Name: Male_00_Head
+  m_Script: {fileID: 11500000, guid: 8b419bf17467cc54db059213f0be3dc2, type: 3}
+  m_Name: Player2
   m_EditorClassIdentifier: 
-  _gameObject: {fileID: 90067841347807880, guid: b3b37af28637dcd4cbde73e6cfacae60, type: 3}
-  _id: 4
-  _name: Male_00_Head_04
-  _objectType: 0
-  _price: 4000
-  _available: 1
-  discovered: 1
+  _name: GauL
+  _player: {fileID: 1696022488804964737, guid: 3f67200e8a3828442b97df2c14d7244a, type: 3}
+  gold: 939999
+  male_00_Head: 3
+  male_01_Eyebrows: 3

@@ -17,5 +17,5 @@ MonoBehaviour:
   _name: Male_00_Head_04
   _objectType: 0
   _price: 5000
-  _available: 0
+  _available: 1
   discovered: 1

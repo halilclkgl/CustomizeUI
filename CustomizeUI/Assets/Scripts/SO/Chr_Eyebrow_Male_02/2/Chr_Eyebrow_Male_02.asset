@@ -17,5 +17,5 @@ MonoBehaviour:
   _name: Chr_Eyebrow_Male_02
   _objectType: 0
   _price: 0
-  _available: 1
+  _available: 0
   discovered: 1

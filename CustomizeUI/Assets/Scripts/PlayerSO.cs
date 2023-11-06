@@ -19,7 +19,8 @@ public class PlayerSO : ScriptableObject
     [SerializeField] private int male_00_Head;
     [SerializeField] private int male_01_Eyebrows;
 
-  
+    public string Name { get { return _name; } }
+    public GameObject Player { get { return _player; } }
     public void DenemeSet(ObjectType _type, int x)
     {
         if (_type == ObjectType.Male_00_Head)
@@ -43,14 +44,13 @@ public class PlayerSO : ScriptableObject
         }
         return 0;
     }
-    public string Name { get { return _name; } }
-    public GameObject Player { get { return _player; } }
+ 
     public int Gold
     {
         get { return gold; }
         set { gold = value; }
     }
 
-  
+
 }
 

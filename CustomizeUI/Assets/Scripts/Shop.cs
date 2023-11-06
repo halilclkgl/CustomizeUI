@@ -5,45 +5,57 @@ using UnityEngine;
 
 public class Shop : MonoBehaviour
 {
-    [SerializeField] PlayerSO _playerSO;
 
-    [SerializeField] int _currentGold;
-    [SerializeField] TextMeshProUGUI _textGold;
-    [SerializeField] TextMeshProUGUI _textGold2;
+    [SerializeField] List<int> _currentGold;
+    [SerializeField] TextMeshProUGUI goldText;
+    [SerializeField] TextMeshProUGUI purchasedGoldText;
+    [SerializeField] CharacterStatsSO characterStatsSO;
+
     void Start()
     {
-        _textGold.text = _playerSO.Gold.ToString();
+        goldText.text = characterStatsSO.Gold.ToString();
+        //  print(Toplam());
     }
 
-    // Update is called once per frame
-    void Update()
+    public void UpdateGold(bool isAdding, int amount, string name)
     {
+        if (isAdding)
+        {
+            _currentGold.Add(amount);
+            //print(Toplam() + "   " + name);
+        }
+        else
+        {
+            _currentGold.Remove(amount);
+        }
 
+        purchasedGoldText.text = Toplam().ToString();
     }
+    public void ConfirmPurchase()
+    {
+        if (characterStatsSO.Gold >= Toplam())
+        {
+            characterStatsSO.Gold -= Toplam();
+            purchasedGoldText.text = Toplam().ToString();
 
-    public void BuyItem(bool x, int y)
-    {
-        if (x)
-        {
-            _currentGold += y;
-  
-            _textGold2.text = _currentGold.ToString();
+            goldText.text = characterStatsSO.Gold.ToString();
+            ResetCurrentGold();
         }
-        if (!x)
-        {
-            _currentGold -= y;
-      
-            _textGold2.text = _currentGold.ToString();
-        }
+        else { Debug.Log("yetersiz"); }
     }
-    public void BuyItemC(int x)
+    public int Toplam()
     {
-        if (_playerSO.Gold >= x)
+        int x = 0;
+        foreach (var item in _currentGold)
         {
-            _playerSO.Gold -= _currentGold;
-            _currentGold = 0;
-            _textGold2.text = _currentGold.ToString();
-            _textGold.text = _playerSO.Gold.ToString();
+            x += item;
+            print(item);
         }
+        return x;
+    }
+    public void ResetCurrentGold()
+    {
+        _currentGold.Clear();
+        purchasedGoldText.text = Toplam().ToString();
     }
 }
